@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Image, Text } from 'react-native';
+import { Image } from 'react-native';
 import PropTypes from 'prop-types';
-import { Formik } from 'formik';
 import * as yup from 'yup';
 
 import Background from '~/components/Background';
