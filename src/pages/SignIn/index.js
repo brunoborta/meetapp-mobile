@@ -1,13 +1,24 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Image } from 'react-native';
 
 import Background from '~/components/Background';
-// import { Container } from './styles';
+import Button from '~/components/Button';
+import Input from '~/components/Input';
+
+import logo from '~/assets/logo.png';
+
+import { Container, Form } from './styles';
 
 export default function SignIn() {
   return (
     <Background>
-      <Text>Sign In</Text>
+      <Container>
+        <Image source={logo} />
+        <Form>
+          <Input placeholder="Digite seu e-mail" />
+          <Button>Entrar</Button>
+        </Form>
+      </Container>
     </Background>
   );
 }
