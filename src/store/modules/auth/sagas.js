@@ -1,41 +1,9 @@
-import { takeLatest, call, put, all } from 'redux-saga/effects';
 import { Alert } from 'react-native';
+import { takeLatest, all, put, call } from 'redux-saga/effects';
 
 import api from '~/services/api';
-import { signInSuccess, signFailure } from './actions';
 
-export function* signIn({ payload }) {
-  try {
-    const { email, password } = payload;
-
-    const response = yield call(api.post, 'sessions', {
-      email,
-      password,
-    });
-
-    const { token, user } = response.data;
-
-    if (user.provider) {
-      Alert.alert(
-        'Erro no login',
-        'O usuario não pode ser prestador de serviço!'
-      );
-      return;
-    }
-
-    api.defaults.headers.Authorization = `Bearer ${token}`;
-
-    yield put(signInSuccess(token, user));
-
-    // history.push('/dashboard');
-  } catch (err) {
-    Alert.alert(
-      'Falha na autenticação',
-      'Houve um problema na autenticação. Verifique seus dados.'
-    );
-    yield put(signFailure());
-  }
-}
+import { signFailure, signInSuccess } from './actions';
 
 export function* signUp({ payload }) {
   try {
@@ -46,15 +14,38 @@ export function* signUp({ payload }) {
       password,
     });
 
-    Alert.alert('Sucesso!', 'Cliente cadastrado com sucesso!');
-
-    // history.push('/');
+    Alert.alert(
+      'Conta criada com sucesso.',
+      'Ja é possível se logar no Meetapp!'
+    );
   } catch (err) {
     Alert.alert(
-      'Falha no cadastro',
-      'Houve um problema na criação do usuário. Verifique seus dados.'
+      'Erro ao criar sua conta.',
+      'Verifique seus dados e tente novamente!'
     );
+    yield put(signFailure());
+  }
+}
 
+export function* signIn({ payload }) {
+  try {
+    const { email, password } = payload;
+    const response = yield call(api.post, 'sessions', {
+      email,
+      password,
+    });
+    const { token, user } = response.data;
+
+    // Adiciona o token nos headers de todas as chamadas
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+
+    yield put(signInSuccess(token, user));
+    // history.push('/dashboard');
+  } catch (err) {
+    Alert.alert(
+      'Erro ao logar na sua conta.',
+      'Verifique seus dados e tente novamente!'
+    );
     yield put(signFailure());
   }
 }
@@ -65,12 +56,12 @@ export function setToken({ payload }) {
   const { token } = payload.auth;
 
   if (token) {
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+    api.defaults.headers.Authorization = `Bearer ${payload.auth.token}`;
   }
 }
 
 export default all([
-  takeLatest('persist/REHYDRATE', setToken),
-  takeLatest('@auth/SIGN_IN_REQUEST', signIn),
   takeLatest('@auth/SIGN_UP_REQUEST', signUp),
+  takeLatest('@auth/SIGN_IN_REQUEST', signIn),
+  takeLatest('persist/REHYDRATE', setToken),
 ]);

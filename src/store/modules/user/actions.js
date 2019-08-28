@@ -5,10 +5,10 @@ export function updateProfileRequest(data) {
   };
 }
 
-export function updateProfileSuccess(profile) {
+export function updateProfileSuccess(user) {
   return {
     type: '@user/UPDATE_PROFILE_SUCCESS',
-    payload: { profile },
+    payload: { user },
   };
 }
 
