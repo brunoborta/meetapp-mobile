@@ -6,11 +6,16 @@ export const Container = styled.SafeAreaView`
   flex: 1;
 `;
 
+export const Controls = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const Title = styled.Text`
   color: #fff;
   font-size: 20px;
-  margin: 30px 0;
-  align-self: center;
+  margin: 30px 10px;
 `;
 
 export const MeetupList = styled.FlatList.attrs({
@@ -38,5 +43,15 @@ export const MeetupTitle = styled.Text`
   font-weight: bold;
   margin-bottom: 10px;
 `;
-export const Info = styled.Text``;
+export const Info = styled.View`
+  flex-direction: row;
+  margin-bottom: 10px;
+  align-items: center;
+`;
+
+export const InfoText = styled.Text`
+  font-size: 13;
+  color: #999;
+  margin-left: 5px;
+`;
 export const SubscribeButton = styled(Button)``;
