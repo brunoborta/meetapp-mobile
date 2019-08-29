@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { Image } from 'react-native';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as yup from 'yup';
 
 import Background from '~/components/Background';
 
 import logo from '~/assets/logo.png';
+
+import { signInRequest } from '~/store/modules/auth/actions';
 
 import {
   Container,
@@ -17,23 +19,15 @@ import {
 } from './styles';
 
 function SignIn({ navigation }) {
+  const dispatch = useDispatch();
   const passwordRef = useRef();
 
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
-  const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Digite um e-mail válido')
-      .required('Preencha o campo de e-mail'),
-    password: yup
-      .string()
-      .min(6, 'A senha deve ter no mínimo 6 caracteres')
-      .required('Preencha o campo de senha'),
-  });
-
-  function submit() {}
+  function submit() {
+    dispatch(signInRequest(email, password));
+  }
   return (
     <Background>
       <Container>
@@ -42,22 +36,22 @@ function SignIn({ navigation }) {
           <FormInput
             placeholder="Digite seu e-mail"
             autoCapitalize="none"
-            autoCorrect="false"
-            autoFocus="true"
+            autoCorrect={false}
+            autoFocus
             keyboardType="email-address"
             onSubmitEditing={() => passwordRef.current.focus()}
             returnKeyType="next"
-            onChange={setEmail}
+            onChangeText={setEmail}
             value={email}
           />
           <FormInput
             placeholder="Sua senha secreta"
             autoCapitalize="none"
-            autoCorrect="false"
+            autoCorrect={false}
             secureTextEntry
             ref={passwordRef}
             onSubmitEditing={submit}
-            onChange={setPassword}
+            onChangeText={setPassword}
             value={password}
             returnKeyType="send"
           />
