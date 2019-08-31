@@ -13,7 +13,7 @@ export function* updateProfile({ payload }) {
     Alert.alert('Sucesso na atualização', 'Perfil atualizado com sucesso!');
     yield put(updateProfileSuccess(response.data));
   } catch (err) {
-    Alert.alert('Erro ao atualizar conta', err.message);
+    Alert.alert('Erro ao atualizar conta', err.response.data.error);
     yield put(updateProfileFailure());
   }
 }
