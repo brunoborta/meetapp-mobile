@@ -45,7 +45,9 @@ function Subscriptions({ isFocused, navigation }) {
     <Background>
       <Container>
         <Header />
-        {meetups.length > 0 ? (
+        {meetups.length === 0 && !loading ? (
+          <Title>Você não esta inscrito em nenhuma meetup =(</Title>
+        ) : (
           <MeetupList
             data={meetups}
             keyExtractor={item => String(item.id)}
@@ -57,8 +59,6 @@ function Subscriptions({ isFocused, navigation }) {
               />
             )}
           />
-        ) : (
-          <Title>Você não esta inscrito em nenhuma meetup =(</Title>
         )}
         {loading && <ActivityIndicator size="small" color="#fff" />}
       </Container>
